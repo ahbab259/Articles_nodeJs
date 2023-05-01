@@ -1,31 +1,24 @@
 const express = require('express')
 const mongoose = require('mongoose')
+const Article = require('./models/article')
 const articleRouter = require('./routes/articles.js')
+const article = require('./models/article')
 const app = express()
 
 app.set('view engine', 'ejs')
   
-app.use(express.urlencoded({extended: false }))
+app.use(express.urlencoded({extended: false}))
 
   
-app.get('/', (req,res) => {
-    const articles = [{
-        title: 'Test Article',
-        createdAt: new Date(),
-        description: 'Test Description'
-    },
-    {
-        title: 'Test Article 2',
-        createdAt: new Date(),
-        description: 'Test Description'
-    }]
+app.get('/', async (req,res) => {
+    const articles = await article.find().sort({createdAt: 'desc'})
     res.render('articles/index', {articles: articles})
 })
 
 //await async
 const start = async () => {
     try {
-        app.listen(5000, () => console.log("Server started on port 5000"))
+      app.listen(5000, () => console.log("Server started on port 5000"))
       await mongoose.connect('mongodb://localhost:27017/localhost')
    
     } catch (error) {
@@ -34,7 +27,6 @@ const start = async () => {
     }
   };
 
-  
 app.use('/articles',articleRouter)
 start();
 
