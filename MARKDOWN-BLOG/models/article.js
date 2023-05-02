@@ -2,6 +2,9 @@ const mongoose = require('mongoose');
 const marked = require('marked')
 const slugify = require('slugify')
 
+
+
+
 const articleSchema = new mongoose.Schema({
     title: {
         type: String,
@@ -25,13 +28,14 @@ const articleSchema = new mongoose.Schema({
     slug:{
         type: String,
         required: true,
-        uniqie: true
-    }
+        uniqe: true
+    },
+
 })
 
 articleSchema.pre('validate', function(next){
-    if(this.title){
-        this.slug = slugify(this.title, {lower: true, strict: true})
+    if(this.id){
+        this.slug = slugify(this.id, {lower: true, strict: true})
     }
 
     next()
